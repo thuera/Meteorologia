@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Painel de leituras da Estação Meteorológica Vórtice.">
+  <title>Estação Vórtice | Painel Meteorológico</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <header class="topo">
+      <a class="marca" href="#inicio" aria-label="Estação Vórtice, início">
+        <span class="simbolo" aria-hidden="true">◉</span>
+        <span>ESTAÇÃO <strong>VÓRTICE</strong></span>
+      </a>
+      <span class="etapa">TCC · PAINEL METEOROLÓGICO · ETAPA 01</span>
+    </header>
+
+    <main id="inicio">
+      <section class="apresentacao">
+        <div>
+          <p class="sobretitulo">CIÊNCIA, TECNOLOGIA E METEOROLOGIA</p>
+          <h1>A atmosfera, <span>em dados.</span></h1>
+          <p class="descricao">Transforme as medições coletadas pelo Arduino Uno em indicadores e gráficos para análise.</p>
+        </div>
+        <div class="painel-status" aria-live="polite">
+          <span class="bolinha-status"></span>
+          <span id="statusDados">Aguardando arquivo CSV</span>
+        </div>
+      </section>
+
+      <section class="importacao painel" aria-labelledby="tituloImportacao">
+        <div class="bloco-titulo">
+          <div>
+            <p class="rotulo-secao">01 / ENTRADA DE DADOS</p>
+            <h2 id="tituloImportacao">Importar medições</h2>
+            <p>Retire o microSD do Arduino e selecione o arquivo .CSV armazenado nele.</p>
+          </div>
+          <label class="botao-upload" for="arquivoCSV">Selecionar arquivo CSV</label>
+          <input id="arquivoCSV" type="file" accept=".csv,text/csv">
+        </div>
+        <div class="faixa-informacao">
+          <span id="nomeArquivo">Nenhum arquivo selecionado</span>
+          <span id="totalLeituras">0 leituras carregadas</span>
+        </div>
+        <p id="mensagemErro" class="mensagem-erro" role="alert" hidden></p>
+      </section>
+
+      <section aria-labelledby="tituloIndicadores" class="secao-indicadores">
+        <div class="cabecalho-secao">
+          <div>
+            <p class="rotulo-secao">02 / VISÃO GERAL</p>
+            <h2 id="tituloIndicadores">Últimas medições válidas</h2>
+          </div>
+          <p class="nota">Valores do CSV, sem previsão meteorológica</p>
+        </div>
+        <div class="indicadores">
+          <article class="indicador"><span class="nome-indicador">Temperatura · DHT11</span><strong id="valorTemperatura">—</strong><span class="legenda-indicador">Graus Celsius</span></article>
+          <article class="indicador"><span class="nome-indicador">Umidade relativa</span><strong id="valorUmidade">—</strong><span class="legenda-indicador">Percentual medido</span></article>
+          <article class="indicador"><span class="nome-indicador">Pressão atmosférica</span><strong id="valorPressao">—</strong><span class="legenda-indicador">hPa · sensor BMP280</span></article>
+          <article class="indicador"><span class="nome-indicador">Estado do sensor de chuva</span><strong id="valorChuva">—</strong><span class="legenda-indicador">Indicação local do sensor</span></article>
+        </div>
+      </section>
+
+      <section aria-labelledby="tituloGraficos" class="secao-graficos">
+        <div class="cabecalho-secao">
+          <div>
+            <p class="rotulo-secao">03 / HISTÓRICO</p>
+            <h2 id="tituloGraficos">Evolução das leituras</h2>
+          </div>
+          <p id="tipoEixo" class="nota">Eixo horizontal: número da leitura</p>
+        </div>
+        <div class="graficos">
+          <article class="grafico painel"><div class="titulo-grafico"><h3>Temperatura</h3><span>DHT11 · °C</span></div><svg id="graficoTemperatura" viewBox="0 0 760 230" role="img" aria-label="Gráfico de temperatura"></svg></article>
+          <article class="grafico painel"><div class="titulo-grafico"><h3>Umidade relativa</h3><span>DHT11 · %</span></div><svg id="graficoUmidade" viewBox="0 0 760 230" role="img" aria-label="Gráfico de umidade"></svg></article>
+          <article class="grafico painel"><div class="titulo-grafico"><h3>Pressão atmosférica</h3><span>BMP280 · hPa</span></div><svg id="graficoPressao" viewBox="0 0 760 230" role="img" aria-label="Gráfico de pressão"></svg></article>
+          <article class="grafico painel"><div class="titulo-grafico"><h3>Índice relativo de luz</h3><span>LDR · %</span></div><svg id="graficoLuz" viewBox="0 0 760 230" role="img" aria-label="Gráfico de claridade"></svg></article>
+        </div>
+      </section>
+
+      <section class="historico painel" aria-labelledby="tituloTabela">
+        <div class="cabecalho-secao">
+          <div>
+            <p class="rotulo-secao">04 / CONFERÊNCIA</p>
+            <h2 id="tituloTabela">Últimas 8 linhas do arquivo</h2>
+          </div>
+        </div>
+        <div class="tabela-rolagem">
+          <table>
+            <thead><tr><th>Leitura</th><th>Tempo (s)</th><th>Temp. (°C)</th><th>Umidade (%)</th><th>Pressão (hPa)</th><th>Chuva</th></tr></thead>
+            <tbody id="corpoTabela"><tr><td colspan="6" class="tabela-vazia">Importe um CSV para consultar o histórico.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="aviso-cientifico" aria-label="Limites das medições">
+        <strong>Nota científica</strong>
+        <p>O índice de luz depende da calibração do LDR. As medições estimadas de rotação ou velocidade da ponta da hélice não representam velocidade real do vento. Esta página apenas exibe leituras e não faz previsão do tempo.</p>
+      </aside>
+    </main>
+    <footer>ESTAÇÃO VÓRTICE · PROTÓTIPO ACADÊMICO · ETAPA 1</footer>
+  </div>
+</body>
+</html>

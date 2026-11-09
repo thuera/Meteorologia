@@ -1,0 +1,59 @@
+ESTAÇÃO VÓRTICE — ETAPA 1
+========================
+
+OBJETIVO
+Criar uma página HTML que recebe um CSV gravado pelo Arduino Uno,
+mostra indicadores, gráficos e as últimas oito linhas de dados.
+
+COMO ABRIR
+1. Descompacte a pasta Estacao_Vortice_Etapa1 no computador.
+2. Abra index.html no navegador (duplo clique no arquivo).
+3. Clique em "Selecionar arquivo CSV".
+4. Para testar, escolha dados/VORTUNO_EXEMPLO.csv.
+5. Depois, faça o mesmo com o CSV real retirado do microSD.
+
+IMPORTANTE
+- O CSV de exemplo contém dados FICTÍCIOS, criados para TESTAR a interface.
+- O site funciona sem internet e sem conectar o Arduino ao computador.
+- Arquivos são lidos localmente pelo navegador; não são enviados a servidor.
+- O formato esperado é separado por ponto e vírgula (;), com cabeçalho.
+- Aceita as versões recentes do Arduino com 15 ou 17 colunas.
+- Temperatura, umidade e pressão são leituras, não previsões.
+- Em gráficos, valores indisponíveis (NA/ERRO/vazio) produzem lacunas.
+- O tempo_s, quando disponível, conta segundos desde a inicialização,
+  não a hora real do dia.
+- A velocidade da ponta da hélice estimada NÃO é velocidade do vento.
+
+O QUE CADA ARQUIVO FAZ
+- index.html: elementos visíveis (botão, títulos, cartões, áreas de gráficos).
+- style.css: cores, fontes, tamanhos e adaptação para celular.
+- script.js: lê o CSV, valida dados, atualiza textos e desenha os gráficos.
+- dados/VORTUNO_EXEMPLO.csv: leituras simuladas para testes.
+
+PRINCIPAIS FUNÇÕES (script.js)
+- converterNumero: transforma textos válidos em números e NA/ERRO em null.
+- interpretarCSV: separa cabeçalho e linhas, valida colunas obrigatórias.
+- ultimoNumero: obtém o último valor numérico válido de uma coluna.
+- atualizarIndicadores: preenche os quatro cartões de resumo.
+- obterEixoHorizontal: escolhe entre segundos, contagem ou ordem de linhas.
+- desenharGrafico: converte números em posições e linhas do SVG.
+- atualizarGraficos: escolhe as quatro colunas e desenha os gráficos.
+- atualizarTabela: lista as últimas oito medições.
+- carregarArquivo: coordena a importação e atualiza a página.
+
+COMPATIBILIDADE
+O arquivo aceita, dentre outras, estas duas formas de cabeçalho:
+- com tempo_s e indice_luz_pct (17 colunas / VORTUNO.CSV)
+- sem tempo_s, com luz_pct (15 colunas / dados.csv)
+As colunas obrigatórias são leitura, temp_dht_C, umid_dht_pct e pressao_hPa.
+
+LIMITES DA ETAPA 1
+- Os gráficos respeitam os valores de tempo_s quando crescentes.
+  Se o contador reiniciou, o gráfico usa um eixo alternativo indicado na tela.
+- Sem previsão Zambretti, sem nowcasting, sem banco de dados e sem servidor.
+- O tamanho máximo do CSV nesta versão é 5 MB.
+- Arquivos CSV produzidos por outros programas podem ter aspas ou outras
+  convenções que este leitor simples ainda não interpreta.
+
+PRÓXIMA ETAPA (em outro chat)
+Validar a coleta e partir para o tratamento meteorológico/Zambretti em Python.
